@@ -152,7 +152,7 @@ var property = "name";
 //alert(obj[property]);
 
 var myFunc = function(){
-    console.log("myFunc")
+    //console.log("myFunc")
 }
  //antipatterns
 //setTimeout("myFunc()", 1000);
@@ -163,3 +163,23 @@ var myFunc = function(){
 //setTimeout(function () {
 //    myFunc(1, 2, 3);
 //}, 1000);
+
+(function () {
+    var local = 1;
+    //eval("local = 3; console.log(local)"); // logs 3
+    //console.log(local); // logs 3
+}());
+
+
+(function () {
+    var local = 1;
+    //Function("console.log(typeof local);")(); // logs undefined
+}());
+
+var month = "06",
+    year = "09";
+//console.log(parseInt(month));
+//console.log(parseInt(month,10));
+
+var myFunc = function(){};
+//myFunc.prototype.dorinha();
