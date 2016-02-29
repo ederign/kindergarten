@@ -163,4 +163,62 @@ var a = new Array(3);
 //console.log(Array.isArray(a));
 
 var json = {"name": "value", "some": [ 1, 2, 3]};
-console.log(json);
+//console.log(json);
+Object.prototype.alert = function (msg) {
+    console.log(msg);
+};
+// an input JSON string
+var jstr = '{"mykey": "my value","otherkey": "other value"}';
+
+// antipattern
+var data = eval('(' + jstr + ')');
+
+// preferred
+var data = JSON.parse(jstr);
+
+//console.log(data.mykey); // "my value"
+//console.log(data.otherkey); // "my value"
+
+var dog = {
+    name: "Fido",
+    dob:  new Date(),
+    legs: [1, 2, 3, 4]
+};
+
+var jsonstr = JSON.stringify(dog);
+//console.log(jsonstr);
+
+// a primitive number
+var n = 100;
+//console.log(typeof n); // "number"
+
+// a Number object
+var nobj = new Number(100);
+//console.log(typeof nobj); // "object"
+
+
+
+// a primitive string be used as an object
+var s = "hello";
+//console.log(s.toUpperCase()); // "HELLO"
+
+// the value itself can act as an object
+//console.log("monkey".slice(3, 6));  // "key"
+//console.log((22 / 7).toPrecision(3)); // "3.14"
+//console.log((22 / 7)); // "3.14"
+
+try {
+    // something bad happened, throw an error
+    throw {
+        name: "MyErrorType", // custom error type
+        message: "oops",
+        extra: "This was rather embarrassing",
+        remedy: genericErrorHandler // who should handle it
+    };
+} catch (e) {
+    // inform the user
+    alert(e.message); // "oops"
+
+    // gracefully handle the error
+    e.remedy(); // calls genericErrorHandler()
+}
