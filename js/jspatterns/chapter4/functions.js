@@ -93,3 +93,184 @@ var statusObject = {
 
 var status = Quo.prototype.get_status.apply(statusObject);
 //console.log(status);
+
+
+// Make a function that adds a lot of stuff.
+
+// Note that defining the variable sum inside of
+// the function does not interfere with the sum
+// defined outside of the function. The function
+// only sees the inner one.
+
+var sum = function (  ) {
+    var i, sum = 0;
+    for (i = 0; i < arguments.length; i += 1) {
+        sum += arguments[i];
+    }
+    return sum;
+};
+
+//console.log(sum(4, 8, 15, 16, 23, 42)); // 108
+
+var add = function (a, b) {
+    if (typeof a !== 'number' || typeof b !== 'number') {
+        throw {
+            name: 'TypeError',
+            message: 'add needs numbers'
+        };
+    }
+    return a + b;
+}
+
+//add(1,"2a");
+
+var try_it = function (  ) {
+    try {
+        add("seven");
+    } catch (e) {
+        console.log(e.name + ': ' + e.message);
+    }
+}
+
+//try_it(  );
+
+Function.prototype.method = function (name, func) {
+    this.prototype[name] = func;
+    return this;
+};
+
+Number.method('integer', function (  ) {
+    return Math[this < 0 ? 'ceil' : 'floor'](this);
+});
+
+//console.log((-10 / 3).integer(  ));
+
+
+function foo() {console.log("foo");}
+
+//foo();
+
+
+// antipattern
+// for illustration only
+
+// global functions
+function foo() {
+    alert('global foo');
+}
+function bar() {
+    alert('global bar');
+}
+
+function hoistMe() {
+    console.log(typeof foo); // "function"
+    console.log(typeof bar); // "undefined"
+
+    foo(); // "local foo"
+    bar(); // TypeError: bar is not a function
+
+    // function declaration:
+    // variable 'foo' and its implementation both get hoisted
+    function foo() {
+        alert('local foo');
+    }
+
+    // function expression:
+    // only variable 'bar' gets hoisted
+    // not the implementation
+    var bar = function () {
+        alert('local bar');
+    };
+}
+//hoistMe();
+
+var setup = function () {
+    alert(1);
+    return function () {
+        alert(2);
+    };
+};
+
+// using the setup function
+//var my = setup(); // alerts 1
+//my(); // alerts 2
+
+var setup = function () {
+    var count = 0;
+    return function () {
+        return (count += 1);
+    };
+};
+
+// usage
+var next = setup();
+next(); // returns 1
+next(); // 2
+//console.log(next()); // 3
+
+
+var scareMe = function () {
+    alert("Boo!");
+    scareMe = function () {
+        alert("Double boo!");
+    };
+};
+
+// using the self-defining function
+//scareMe(); // Boo!
+//scareMe(); // Double boo!
+
+//(function () {
+//    alert('watch out!');
+//}());
+
+(function () {
+
+    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        today = new Date(),
+        msg = 'Today is ' + days[today.getDay()] + ', ' + today.getDate();
+
+    //alert(msg);
+
+}()); // "Today is Fri, 13"
+
+var getResult = (function () {
+    var res = 2 + 2;
+    return function () {
+        return res;
+    };
+}());
+
+//console.log(getResult());
+
+var o = {
+    message: (function () {
+        var who = "me",
+            what = "call";
+        return what + " " + who;
+    }()),
+    getMsg: function () {
+        return this.message;
+    }
+};
+// usage
+//console.log(o.getMsg()); // "call me"
+//console.log(o.message);  // "call me"
+
+({
+    // here you can define setting values
+    // a.k.a. configuration constants
+    max_width: 600,
+    max_height: 400,
+
+    // you can also define utility methods
+    gimmeMax: function () {
+        return this.max_width + "x" + this.max_height;
+    },
+
+    // initialize
+    init: function () {
+        console.log(this.gimmeMax());
+        // more init tasks...
+    }
+}).init();
