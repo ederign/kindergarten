@@ -4,14 +4,16 @@ Object.prototype.alert = function (msg) {
 
 //Before : 5 globals
 //Warning: antipattern
-function Parent(){};
-function Child(){};
+function Parent() {
+};
+function Child() {
+};
 
-var some_var=1;
+var some_var = 1;
 
 var module1 = {};
-module1.data={a:1, b:2};
-var module2={};
+module1.data = {a: 1, b: 2};
+var module2 = {};
 
 //After: 1 Global
 //var MYAPP={};//UNSAFE
@@ -20,17 +22,18 @@ var module2={};
 //    var MYAPP = {};
 //}
 
-var MYAPP= MYAPP || {};
+var MYAPP = MYAPP || {};
 
-MYAPP.Parent = function () {};
-MYAPP.Child = function(){};
+MYAPP.Parent = function () {
+};
+MYAPP.Child = function () {
+};
 
 MYAPP.some_var = 1;
-MYAPP.modules={};
-MYAPP.modules.module1={};
-MYAPP.modules.module1.data={a:1, b:2};
+MYAPP.modules = {};
+MYAPP.modules.module1 = {};
+MYAPP.modules.module1.data = {a: 1, b: 2};
 MYAPP.modules.module2 = {};
-
 
 
 var MYAPP = MYAPP || {};
@@ -68,9 +71,9 @@ MYAPP.namespace('once.upon.a.time.there.was.this.long.nested.property');
 //private properties and methods
 
 var myobj = {
-    myprop : 1,
+    myprop: 1,
     getProp: function () {
-      return this.myprop;
+        return this.myprop;
     }
 };
 //console.log(myobj.myprop);
@@ -87,25 +90,25 @@ var myobj = {
 //console.log(toy.stretch());
 
 
-function Gadget(){
+function Gadget() {
     var name = 'Ipod';
-    this.getName = function(){
+    this.getName = function () {
         return name;
     }
 }
 
 var toy = new Gadget();
 //console.log(toy.name);
-console.log(toy.getName())
+//console.log(toy.getName())
 
 
-function GadgetWithSpecs(){
+function GadgetWithSpecs() {
     var specs = {
         width: 320,
         height: 480,
         color: "white"
     };
-    this.getSpecs = function(){
+    this.getSpecs = function () {
         return specs;
     };
 }
@@ -113,8 +116,96 @@ function GadgetWithSpecs(){
 var toy = new GadgetWithSpecs(),
     specs = toy.getSpecs();
 
-console.log(toy.getSpecs());
-specs.color = "black";
-console.log(toy.getSpecs());
+//console.log(toy.getSpecs());
+//specs.color = "black";
+//console.log(toy.getSpecs());
 
 //object literals
+//
+//var myobj;
+//
+//(function () {
+//   var name = "name";
+//    myobj = {
+//       getName: function(){
+//           return name;
+//       }
+//   };
+//}());
+//
+//console.log(myobj.getName())
+
+var myobj = (function () {
+    var name = "name";
+    return {
+        getName: function () {
+            return name;
+        }
+    };
+}());
+//console.log(myobj.getName());
+
+
+function GadgetNew() {
+    var name = 'Ipod';
+    this.getName = function () {
+        return name;
+    };
+};
+
+GadgetNew.prototype = (function () {
+    var browser = 'MObile Web kit';
+    return {
+        getBrowser: function () {
+            return browser;
+        }
+    };
+}());
+var otherToy = new GadgetNew();
+console.log(otherToy.getName());
+console.log(otherToy.getBrowser());
+
+
+//module pattern
+
+MYAPP.namespace('MYAPP.utilities.array');
+
+MYAPP.utilities.array = (function () {
+    return {
+        isArray: function (needle, haystack) {
+        },
+        isArray: function(a){
+
+        }
+    };
+}());
+
+//revealing module
+MYAPP.utilities.array = (function () {
+
+    // private properties
+    var array_string = "[object Array]",
+        ops = Object.prototype.toString,
+
+    // private methods
+        inArray = function (haystack, needle) {
+            for (var i = 0, max = haystack.length; i < max; i += 1) {
+                if (haystack[i] === needle) {
+                    return i;
+                }
+            }
+            return −1;
+        },
+        isArray = function (a) {
+            return ops.call(a) === array_string;
+        };
+    // end var
+
+    // revealing public API
+    return {
+        isArray: isArray,
+        indexOf: inArray
+    };
+}());
+
+//modules that creates constructors
