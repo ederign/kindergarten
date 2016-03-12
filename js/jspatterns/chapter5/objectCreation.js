@@ -162,8 +162,8 @@ GadgetNew.prototype = (function () {
     };
 }());
 var otherToy = new GadgetNew();
-console.log(otherToy.getName());
-console.log(otherToy.getBrowser());
+//console.log(otherToy.getName());
+//console.log(otherToy.getBrowser());
 
 
 //module pattern
@@ -174,7 +174,7 @@ MYAPP.utilities.array = (function () {
     return {
         isArray: function (needle, haystack) {
         },
-        isArray: function(a){
+        isArray: function (a) {
 
         }
     };
@@ -194,7 +194,7 @@ MYAPP.utilities.array = (function () {
                     return i;
                 }
             }
-            return −1;
+            //return −1;
         },
         isArray = function (a) {
             return ops.call(a) === array_string;
@@ -209,3 +209,121 @@ MYAPP.utilities.array = (function () {
 }());
 
 //modules that creates constructors
+
+//static
+//var Gadget1 = function (){
+//    var price;
+//};
+//
+//Gadget1.isShiny = function(){
+//    return "you bet";
+//};
+//
+//Gadget1.prototype.setPrice = function (_price){
+//    price = _price;
+//}
+//Gadget1.prototype.getPrice = function (){
+//    return price;
+//}
+
+//console.log(Gadget.isShiny());
+//var iphone = new Gadget1();
+//iphone.setPrice(400);
+//console.log(iphone.price);
+//console.log(iphone.getPrice());
+//
+//console.log(typeof Gadget1.setPrice);
+//console.log(typeof iphone.isShiny);
+//
+//Gadget1.prototype.isShiny = Gadget1.isShiny();
+//console.log(typeof iphone.isShiny);
+
+////?
+var Gadget = function (price) {
+    this.price = price;
+};
+
+Gadget.prototype.getPrice = function () {
+    return this.price;
+}
+
+Gadget.isShiny = function () {
+    var msg = "you bet";
+
+    if (this instanceof Gadget) {
+        msg += ", on instance " + this.getPrice();
+    }
+
+    return msg;
+};
+
+Gadget.prototype.isShiny = function () {
+    return Gadget.isShiny.call(this);
+}
+
+//console.log(Gadget.isShiny());
+var iphone = new Gadget(400);
+//console.log(iphone.isShiny());
+//console.log(Gadget.isShiny());
+//
+
+
+//private static members
+
+var Gadget = (function () {
+    var counter = 0, NewGadget;
+
+    NewGadget = function () {
+        counter += 1;
+    }
+    NewGadget.prototype.getLastId = function () {
+        return counter;
+    }
+
+    return NewGadget;
+}());
+var g1 = new Gadget();
+var g2 = new Gadget();
+var g3 = new Gadget();
+//console.log(g3.getLastId());
+
+//object contasnts
+
+
+//chaining pattern
+
+var obj = {
+    value: 1,
+    increment: function () {
+        this.value += 1;
+        return this;
+    },
+    add: function (v) {
+        this.value += v;
+        return this;
+    },
+    shout: function () {
+        console.log(this.value);
+    }
+
+};
+//obj.increment().add(3).shout();
+
+//method
+
+
+if (typeof Function.prototype.method !== "function") {
+    Function.prototype.method = function (name, impl) {
+        this.prototype[name] = impl;
+        return this;
+    };
+}
+
+var Person = function (name) {
+    this.name = name;
+}.method('getName', function () {
+    return this.name;
+});
+
+var a = new Person("Dora");
+console.log(a.getName());
