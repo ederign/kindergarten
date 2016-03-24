@@ -4,12 +4,18 @@ public class Main {
 
     public static void main( String[] args ) {
 
-        Gateway g = new GatewayA();
+        PaymentProcessor paymentProcessor = getPaymentProcessor();
 
-        g.setNext( new GatewayB() );
-        g.setNext( new GatewayC() );
+        paymentProcessor.process( new Payment( 10 ) );
 
-        g.process( new Payment( 10 ) ); //Gateway B: 10
+    }
 
+    private static PaymentProcessor getPaymentProcessor() {
+        PaymentProcessor g = new PaymentProcessorA();
+
+        g.setNext( new PaymentProcessorB() );
+        g.setNext( new PaymentProcessorC() );
+
+        return g;
     }
 }
