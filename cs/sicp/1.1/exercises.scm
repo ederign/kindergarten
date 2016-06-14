@@ -96,4 +96,44 @@ Using applicative-order evaluation, the evaluation of (test 0 (p)) never termina
 In contrast, normal-order languages delay evaluation of procedure arguments until the actual argument values are needed. Delaying evaluation of procedure arguments until the last possible moment (e.g., until they are required by a primitive operation) is called lazy evaluation.
 |#
 
+ 
+ ;;;1.6
+ #|
+Due to applicative-order evaluation, the application of 
+(sqrt-iter (improve guess x) x)
+
+will never terminate:
+
+sqrt-iter
+  new-if
+    sqrt-iter
+        new-if
+          ...
+            ...
+|#
+ ;;; 1.7
+
+ (define (average x y)
+	(/ (+ x y) 2))
+
+
+(define (improve guess x)
+	(average guess (/ x guess)))
+
+(define (good-enought? guess x)
+	(< (abs (- (square guess) x))
+		.001))
+
+ (define (try guess x)
+ 	(if (good-enought? guess x)
+ 		guess
+ 		(try (improve guess x) x)))
+
+ (define (sqrt x) (try 1 x))
+
+ (sqrt 9.0)
+
+
+
+
 
