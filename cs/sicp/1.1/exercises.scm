@@ -120,18 +120,53 @@ sqrt-iter
 (define (improve guess x)
 	(average guess (/ x guess)))
 
-(define (good-enought? guess x)
+(define (good-enough? guess x)
 	(< (abs (- (square guess) x))
 		.001))
 
  (define (try guess x)
- 	(if (good-enought? guess x)
+ 	(if (good-enough? guess x)
  		guess
  		(try (improve guess x) x)))
 
  (define (sqrt x) (try 1 x))
 
  (sqrt 9.0)
+
+ (sqrt 0.0001) ;0.03230844833048122 instead of the expected 0.01 
+
+
+
+(define (good-enough2? guess oldguess) 
+  (< (abs (- (improve guess oldguess) guess)) 
+     (* guess .001)))
+
+(define (sqrt-iter guess oldguess x) 
+   (if (good-enough2? guess oldguess) 
+       guess 
+       (sqrt-iter (improve guess x) guess 
+                  x))) 
+
+(define (good-enough2? guess oldguess) 
+   (< (abs (- guess oldguess)) 
+      (* guess 0.001))) 
+  
+ (define (sqrt2 x) 
+   (sqrt-iter 1.0 2.0 x)) 
+
+
+(sqrt2 9.0)
+
+(sqrt2 0.0001)
+
+(sqrt2 1000000000000) 
+
+
+
+
+
+
+
 
 
 
