@@ -6,6 +6,7 @@ eb.onopen = function () {
         var li = $('<li>');
         var openMindMap = function () {
             new MindMapEditor(mindMap, eb);
+            $('.save-as-png').show();
             return false;
         }
         var deleteMindMap = function () {
@@ -30,6 +31,23 @@ eb.onopen = function () {
             renderListItem(result);
             nameInput.val('');
         });
+        return false;
+    });
+    $('.save-as-png').click(function () {
+        var svg = $('.editor').html();
+        var stylesheet = document.styleSheets[0];
+        var css = '';
+        for (var i = 0; i < stylesheet.cssRules.length; i++) {
+            css += stylesheet.cssRules[i].cssText;
+            css += "\n";
+        }
+        eb.send('com.vertxbook.svg2png', {svg: svg, css: css},
+            function (result) {
+                if (result.data) {
+                    window.location.href =
+                        'data:image/png;base64,' + result.data;
+                }
+            });
         return false;
     });
     eb.send('mindMaps.list', {}, function (res) {
